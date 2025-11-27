@@ -64,8 +64,9 @@
 请确保您已经安装了[ComfyUI](https://github.com/comfyanonymous/ComfyUI)
 ```
 cd custom_nodes
-git clone https://github.com/QueenPuxxi/ComfyUI-Cafe-Node.git
+git clone https://github.com/NgoChingYee/ComfyUI-Cafe-Node.git
 cd ComfyUI-Cafe-Node
 pip install -r requirements.txt
 ```
 安装完成后，需要重启ComfyUI才能使用该节点
+
