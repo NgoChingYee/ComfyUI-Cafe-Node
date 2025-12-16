@@ -6,6 +6,9 @@ from .pixian_rmbg import PixianRMBG
 from .randomly_delete_noncore_prompt import RandomlyDeleteNoncorePrompt
 from .loadimg import LoadImg
 from .cafetextsave import CafeSaveText
+from .balance_query_start import BalanceQueryStartNode
+from .balance_query_end import BalanceQueryEndNode
+from .transparent_1024_check import Transparent1024Check
 
 WEB_DIRECTORY = "./js"
 
@@ -17,5 +20,8 @@ NODE_CLASS_MAPPINGS = {
     "Pixian RMBG☕️": PixianRMBG,
     "随机删除非核心提示词☕️": RandomlyDeleteNoncorePrompt,
     "加载图像（✅透明通道✅文件名）☕️": LoadImg,
-    "保存文本文件☕️": CafeSaveText
+    "保存文本文件☕️": CafeSaveText,
+    "任务开始时查询余额☕️": BalanceQueryStartNode,
+    "任务结束时查询余额☕️": BalanceQueryEndNode,
+    "🍌Nano空图判别器☕️": Transparent1024Check
     }
