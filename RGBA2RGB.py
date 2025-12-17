@@ -14,7 +14,7 @@ class RGBA2RGB:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "rgba2rgb"
-    CATEGORY = "图像处理☕️"
+    CATEGORY = "Cafe_Nodes/图像处理☕️"
     DESCRIPTION = """将RGBA图像的透明部分转为非透明部分的平均像素相反值，以此突出主体"""
 
     def rgba2rgb(self, image):

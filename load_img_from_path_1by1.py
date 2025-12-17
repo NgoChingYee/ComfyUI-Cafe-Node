@@ -72,7 +72,7 @@ class load_images_from_the_path_one_by_one:
     RETURN_NAMES = ("image", "image_path")
     FUNCTION = "start"
 
-    CATEGORY = "输入Input☕️"
+    CATEGORY = "Cafe_Nodes/输入Input☕️"
 
     def start(self, image_dir_path='', mode='automatic', index=0):
         image_dir_path = self.normalize_path(image_dir_path)

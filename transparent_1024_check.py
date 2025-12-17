@@ -20,7 +20,7 @@ class Transparent1024Check:
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("image",)
     FUNCTION = "check"
-    CATEGORY = "图像处理☕️"
+    CATEGORY = "Cafe_Nodes/图像处理☕️"
 
     def check(self, image):
         """

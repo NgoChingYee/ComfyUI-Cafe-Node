@@ -23,5 +23,5 @@ NODE_CLASS_MAPPINGS = {
     "保存文本文件☕️": CafeSaveText,
     "任务开始时查询余额☕️": BalanceQueryStartNode,
     "任务结束时查询余额☕️": BalanceQueryEndNode,
-    "🍌Nano空图判别器☕️": Transparent1024Check
+    "Nano空图判别器☕️": Transparent1024Check
     }

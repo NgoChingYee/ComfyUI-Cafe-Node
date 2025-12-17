@@ -26,7 +26,7 @@ class BalanceQueryStartNode:
     RETURN_NAMES = ("balance_text", "balance_float")
 
     FUNCTION = "query_balance"
-    CATEGORY = "查询余额☕️"
+    CATEGORY = "Cafe_Nodes/查询余额☕️"
 
     def query_balance(self, trigger_image=None, seed=0, api_key=""):
         """

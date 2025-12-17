@@ -19,7 +19,7 @@ class PixianRMBG:
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "pixian"
-    CATEGORY = "图像处理☕️"
+    CATEGORY = "Cafe_Nodes/图像处理☕️"
 
     def pixian(self, image, api_key, api_secret):
         print("📥 原始输入 image:")

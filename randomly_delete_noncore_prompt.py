@@ -19,7 +19,7 @@ class RandomlyDeleteNoncorePrompt:
     RETURN_TYPES = ("STRING", "STRING",)
     RETURN_NAMES = ("kept_prompt", "deleted_prompt",)
     FUNCTION = "filter_elements"
-    CATEGORY = "提示词处理☕️"
+    CATEGORY = "Cafe_Nodes/提示词处理☕️"
 
     def filter_elements(self, input_text, core_element, separator, seed):
         if seed != -1:

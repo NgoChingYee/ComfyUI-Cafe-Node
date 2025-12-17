@@ -81,7 +81,7 @@ class CafeSaveText:
     RETURN_NAMES = ("text", "image", "output_path")  # 新增 output path 输出
     FUNCTION = "save_text"
     OUTPUT_NODE = True
-    CATEGORY = "保存输出☕️"
+    CATEGORY = "Cafe_Nodes/保存输出☕️"
 
     def save_image(self, images, filename_prefix, extension='png', quality=100, prompt=None,
                    extra_pnginfo=None, delimiter='_', number_padding=4, output_path='',

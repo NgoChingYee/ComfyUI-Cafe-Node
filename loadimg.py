@@ -27,7 +27,7 @@ class LoadImg:
     RETURN_TYPES = ("IMAGE", "MASK", "STRING")
     RETURN_NAMES = ("image", "mask", "filename")
     FUNCTION = "load_image"
-    CATEGORY = '输入Input☕️'
+    CATEGORY = 'Cafe_Nodes/输入Input☕️'
 
     @staticmethod
     def load_image(image, keep_alpha_channel):

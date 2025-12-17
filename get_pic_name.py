@@ -21,7 +21,7 @@ class GPICNAME:
 
     #OUTPUT_NODE = False
 
-    CATEGORY = "图像处理☕️"
+    CATEGORY = "Cafe_Nodes/图像处理☕️"
 
     def get_picname(self, image_path):
         # Extract the file name using os.path for better cross-platform support
