@@ -61,6 +61,7 @@ class load_images_from_the_path_one_by_one:
                 "image_dir_path": ("STRING", {"default": ''}),
                 "mode": (["automatic", "index"],),
                 "index": ("INT", {"default": 0, "min": 0, "step": 1}),
+                "keep_alpha_channel": ("BOOLEAN", {"default": False, "label_on": "enabled", "label_off": "disabled"}),
             },
         }
 
@@ -68,13 +69,13 @@ class load_images_from_the_path_one_by_one:
     def IS_CHANGED(cls, **kwargs):
         return float("NaN")
 
-    RETURN_TYPES = ("IMAGE", "STRING")
-    RETURN_NAMES = ("image", "image_path")
+    RETURN_TYPES = ("IMAGE", "MASK", "STRING")
+    RETURN_NAMES = ("image", "mask", "image_path")
     FUNCTION = "start"
 
-    CATEGORY = "Cafe_Nodes/输入Input☕️"
+    CATEGORY = "输入Input☕️"
 
-    def start(self, image_dir_path='', mode='automatic', index=0):
+    def start(self, image_dir_path='', mode='automatic', index=0, keep_alpha_channel=False):
         image_dir_path = self.normalize_path(image_dir_path)
         self.store_index = index
         #PARTA 初始化和校验image list 相关信息
@@ -167,7 +168,7 @@ class load_images_from_the_path_one_by_one:
             if self.store_index >= len(image_paths):
                 self.store_index = 0
             image_path = image_paths[self.store_index]
-            index_pic =  self.load_image(image_path)
+            index_pic, mask = self.load_image(image_path, keep_alpha_channel)
             self.store_index += 1
             if self.store_index == len(image_paths):
                 self.store_index = 0
@@ -178,7 +179,7 @@ class load_images_from_the_path_one_by_one:
             if self.store_index >= len(image_paths):
                 self.store_index = self.store_index % len(image_paths)
             image_path = image_paths[self.store_index]
-            index_pic =  self.load_image(image_path)
+            index_pic, mask = self.load_image(image_path, keep_alpha_channel)
             print("******  *** store_index 2 ***********", self.store_index)
 
         print(f"*********type index_pic: {type(index_pic)} *********")
@@ -192,7 +193,7 @@ class load_images_from_the_path_one_by_one:
             json.dump(self.data, file, indent=4)
             print(f"数据已写入到 {WD_HISTORY_PATH} 文件中。")
 
-        return (index_pic, image_path)
+        return (index_pic, mask, image_path)
 
 
     def load_image_list(self, image_dir_path=''):
@@ -216,8 +217,7 @@ class load_images_from_the_path_one_by_one:
         num_images = len(image_paths)
         return image_paths, num_images, total_size
 
-    def load_image(self, image_path):
-
+    def load_image(self, image_path, keep_alpha_channel):
         img = node_helpers.pillow(Image.open, image_path)
 
         output_images = []
@@ -230,33 +230,31 @@ class load_images_from_the_path_one_by_one:
             i = node_helpers.pillow(ImageOps.exif_transpose, i)
 
             if i.mode == 'I':
-                i = i.point(lambda i: i * (1 / 255))
-            image = i.convert("RGB")
+                i = i.point(lambda pixel: pixel * (1 / 255))
 
             has_alpha = "A" in i.getbands()
-            if has_alpha:
-                image = i.convert("RGBA")
-            if i.mode == 'P' and 'transparency' in i.info:
-                image = i.convert("RGBA")
+            if has_alpha and keep_alpha_channel:
+                image_data = i.convert("RGBA")
+            else:
+                image_data = i.convert("RGB")
 
             if len(output_images) == 0:
-                w = image.size[0]
-                h = image.size[1]
+                w = image_data.size[0]
+                h = image_data.size[1]
 
-            if image.size[0] != w or image.size[1] != h:
+            if image_data.size[0] != w or image_data.size[1] != h:
                 continue
 
-            image = np.array(image).astype(np.float32) / 255.0
-            image = torch.from_numpy(image)[None,]
+            image_np = np.array(image_data).astype(np.float32) / 255.0
+            image_tensor = torch.from_numpy(image_np)[None, ]
+
             if 'A' in i.getbands():
                 mask = np.array(i.getchannel('A')).astype(np.float32) / 255.0
                 mask = 1. - torch.from_numpy(mask)
-            elif i.mode == 'P' and 'transparency' in i.info:
-                mask = np.array(i.convert('RGBA').getchannel('A')).astype(np.float32) / 255.0
-                mask = 1. - torch.from_numpy(mask)
             else:
                 mask = torch.zeros((64, 64), dtype=torch.float32, device="cpu")
-            output_images.append(image)
+
+            output_images.append(image_tensor)
             output_masks.append(mask.unsqueeze(0))
 
         if len(output_images) > 1 and img.format not in excluded_formats:
@@ -266,7 +264,7 @@ class load_images_from_the_path_one_by_one:
             output_image = output_images[0]
             output_mask = output_masks[0]
 
-        return output_image
+        return output_image, output_mask
 
     def normalize_path(self, path):
         """标准化路径：处理多余斜杠并确保绝对路径"""
